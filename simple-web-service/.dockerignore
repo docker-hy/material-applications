@@ -1,0 +1,6 @@
+Dockerfile
+.dockerignore
+.gitignore
+simple-web-service
+README.md
+text.log
