@@ -3,7 +3,7 @@ import { Input, Button, List, ListItem } from '@material-ui/core';
 import { axiosInstance } from "../util/pingpong";
 
 const PostgresConnection = () => {
-  const [message, setMessage] = useState("");
+  const [messageBody, setMessageBody] = useState("");
   const [messages, setMessages] = useState([]);
 
   const getMessages = async () => {
@@ -15,13 +15,13 @@ const PostgresConnection = () => {
 
   const postMessage = async () => {
     try {
-      await axiosInstance.post("/messages", { message });
+      await axiosInstance.post("/messages", { body: messageBody });
       await getMessages();
-      setMessage("");
+      setMessageBody("");
     } catch (e) {}
   };
 
-  const handleMessageChange = (event) => setMessage(event.target.value);
+  const handleMessageChange = (event) => setMessageBody(event.target.value);
 
   return (
     <>
@@ -30,7 +30,7 @@ const PostgresConnection = () => {
           variant="outlined"
           id="message"
           placeholder="Write message here"
-          value={message}
+          value={messageBody}
           onChange={handleMessageChange}
         />
         <Button variant="outlined" onClick={postMessage}>
