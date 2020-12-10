@@ -3,3 +3,4 @@ Dockerfile
 .gitignore
 server
 README.md
+docker-compose.yml
