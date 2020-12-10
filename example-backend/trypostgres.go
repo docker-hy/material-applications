@@ -43,9 +43,9 @@ func TryPostgres() (bool, error) {
 // InitializePostgresClient checks for the connection
 func InitializePostgresClient() {
 	postgresHost := os.Getenv("POSTGRES_HOST")
-	postgresUser := FallbackString(os.Getenv("POSTGRES_USER"), "pguser")
-	postgresPassword := FallbackString(os.Getenv("POSTGRES_PASSWORD"), "epicpassword")
-	postgresDatabase := FallbackString(os.Getenv("POSTGRES_DATABASE"), "pguser")
+	postgresUser := FallbackString(os.Getenv("POSTGRES_USER"), "postgres")
+	postgresPassword := FallbackString(os.Getenv("POSTGRES_PASSWORD"), "postgres")
+	postgresDatabase := FallbackString(os.Getenv("POSTGRES_DATABASE"), "postgres")
 
 	if (len(postgresHost) == 0) {
 		fmt.Println("[Ex 2.X+] POSTGRES_HOST env was not passed so postgres connection is not initialized")
