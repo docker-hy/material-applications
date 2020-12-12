@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"net/http"
 	"os"
 	"server/cache"
@@ -51,10 +50,9 @@ func pingpong(context *gin.Context) {
 func main() {
 	port := FallbackString(os.Getenv("PORT"), "8080")
 	allowedOrigin := FallbackString(os.Getenv("REQUEST_ORIGIN"), "https://example.com")
-	var ctx = context.Background()
 
-	cache.InitializeRedisClient(ctx)
-	pgconnection.InitializePostgresClient(ctx)
+	cache.InitializeRedisClient()
+	pgconnection.InitializePostgresClient()
 
 	config := cors.DefaultConfig()
 

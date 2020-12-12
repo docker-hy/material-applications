@@ -38,7 +38,7 @@ func createSchema() error {
 // TryPostgres tests postgres connection, returns boolean and possibly error
 func TryPostgres() (bool, error) {
 	if pgdb == nil {
-		InitializePostgresClient(ctx)
+		InitializePostgresClient()
 	}
 
 	message := new(Message)
@@ -57,7 +57,7 @@ func TryPostgres() (bool, error) {
 }
 
 // InitializePostgresClient checks for the connection
-func InitializePostgresClient(ctx context.Context) {
+func InitializePostgresClient() {
 	postgresHost := os.Getenv("POSTGRES_HOST")
 	postgresUser := FallbackString(os.Getenv("POSTGRES_USER"), "postgres")
 	postgresPassword := FallbackString(os.Getenv("POSTGRES_PASSWORD"), "postgres")

@@ -11,13 +11,13 @@ import (
 )
 
 var rdb *redis.Client
+var ctx = context.Background()
 
 // TryRedis tests redis connection, returns boolean and possibly error
 func TryRedis() (bool, error) {
-	var ctx = context.Background()
 
 	if rdb == nil {
-		InitializeRedisClient(ctx)
+		InitializeRedisClient()
 	}
 	val, err := rdb.Get(ctx, "ping").Result()
 	if err == redis.Nil {
@@ -32,7 +32,7 @@ func TryRedis() (bool, error) {
 }
 
 // InitializeRedisClient sets the initial value for the try
-func InitializeRedisClient(ctx context.Context) {
+func InitializeRedisClient() {
 	redisHost := os.Getenv("REDIS_HOST")
 	if len(redisHost) == 0 {
 		fmt.Println("[Ex 2.X+] REDIS_HOST env was not passed so redis connection is not initialized")
