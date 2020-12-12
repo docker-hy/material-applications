@@ -4,20 +4,12 @@ import (
 	"net/http"
 	"os"
 	"server/cache"
+	"server/common"
 	"server/pgconnection"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
-
-// FallbackString returns the second string if the first is empty. For ENVs
-func FallbackString(value, fallback string) string {
-	if len(value) == 0 {
-		return fallback
-	}
-
-	return value
-}
 
 func pingpong(context *gin.Context) {
 
@@ -48,8 +40,8 @@ func pingpong(context *gin.Context) {
 
 // Start server
 func main() {
-	port := FallbackString(os.Getenv("PORT"), "8080")
-	allowedOrigin := FallbackString(os.Getenv("REQUEST_ORIGIN"), "https://example.com")
+	port := common.FallbackString(os.Getenv("PORT"), "8080")
+	allowedOrigin := common.FallbackString(os.Getenv("REQUEST_ORIGIN"), "https://example.com")
 
 	cache.InitializeRedisClient()
 	pgconnection.InitializePostgresClient()

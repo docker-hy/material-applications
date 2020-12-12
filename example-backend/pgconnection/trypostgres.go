@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"server/common"
 	"time"
 
 	"github.com/go-pg/pg/v10"
@@ -17,14 +18,6 @@ var ctx = context.Background()
 type Message struct {
 	ID   int64  `json:"id"`
 	Body string `json:"body"`
-}
-
-func FallbackString(value, fallback string) string {
-	if len(value) == 0 {
-		return fallback
-	}
-
-	return value
 }
 
 // createSchema creates database schema for User and Story models.
@@ -59,9 +52,9 @@ func TryPostgres() (bool, error) {
 // InitializePostgresClient checks for the connection
 func InitializePostgresClient() {
 	postgresHost := os.Getenv("POSTGRES_HOST")
-	postgresUser := FallbackString(os.Getenv("POSTGRES_USER"), "postgres")
-	postgresPassword := FallbackString(os.Getenv("POSTGRES_PASSWORD"), "postgres")
-	postgresDatabase := FallbackString(os.Getenv("POSTGRES_DATABASE"), "postgres")
+	postgresUser := common.FallbackString(os.Getenv("POSTGRES_USER"), "postgres")
+	postgresPassword := common.FallbackString(os.Getenv("POSTGRES_PASSWORD"), "postgres")
+	postgresDatabase := common.FallbackString(os.Getenv("POSTGRES_DATABASE"), "postgres")
 
 	if len(postgresHost) == 0 {
 		fmt.Println("[Ex 2.X+] POSTGRES_HOST env was not passed so postgres connection is not initialized")
