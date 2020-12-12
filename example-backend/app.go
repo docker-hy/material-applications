@@ -5,6 +5,7 @@ import (
 	"os"
 	"server/cache"
 	"server/common"
+	"server/controller"
 	"server/pgconnection"
 
 	"github.com/gin-contrib/cors"
@@ -56,8 +57,8 @@ func main() {
 
 	router.GET("/ping", pingpong)
 
-	router.GET("/messages", GetMessages)
-	router.POST("/messages", CreateMessage)
+	router.GET("/messages", controller.GetMessages)
+	router.POST("/messages", controller.CreateMessage)
 
 	router.NoRoute(func(context *gin.Context) {
 		path := context.Request.URL.Path
