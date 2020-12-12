@@ -1,15 +1,19 @@
 package main
 
 import (
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
+	"context"
 	"net/http"
 	"os"
+	"server/cache"
+	"server/pgconnection"
+
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 )
 
 // FallbackString returns the second string if the first is empty. For ENVs
 func FallbackString(value, fallback string) string {
-	if (len(value) == 0) {
+	if len(value) == 0 {
 		return fallback
 	}
 
@@ -21,18 +25,18 @@ func pingpong(context *gin.Context) {
 	redis := context.Query("redis") == "true"
 	postgres := context.Query("postgres") == "true"
 
-	if (redis) {
-		_, err := TryRedis()
-		if (err != nil) {
+	if redis {
+		_, err := cache.TryRedis()
+		if err != nil {
 			context.String(http.StatusNotImplemented, err.Error())
 			return
 		}
 		context.String(http.StatusOK, "pong")
 		return
 	}
-	if (postgres) {
-		_, err := TryPostgres()
-		if (err != nil) {
+	if postgres {
+		_, err := pgconnection.TryPostgres()
+		if err != nil {
 			context.String(http.StatusNotImplemented, err.Error())
 			return
 		}
@@ -43,13 +47,14 @@ func pingpong(context *gin.Context) {
 	context.String(http.StatusOK, "pong")
 }
 
-
 // Start server
 func main() {
 	port := FallbackString(os.Getenv("PORT"), "8080")
 	allowedOrigin := FallbackString(os.Getenv("REQUEST_ORIGIN"), "https://example.com")
-	InitializeRedisClient()
-	InitializePostgresClient()
+	var ctx = context.Background()
+
+	cache.InitializeRedisClient(ctx)
+	pgconnection.InitializePostgresClient(ctx)
 
 	config := cors.DefaultConfig()
 
@@ -66,7 +71,7 @@ func main() {
 
 	router.NoRoute(func(context *gin.Context) {
 		path := context.Request.URL.Path
-		context.String(404, "The only API of this app is /ping. Request received to path " + path + " and this resulted in 404.")
+		context.String(404, "The only API of this app is /ping. Request received to path "+path+" and this resulted in 404.")
 	})
 
 	router.Run(":" + port)

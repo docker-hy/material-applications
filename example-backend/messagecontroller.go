@@ -2,17 +2,20 @@ package main
 
 import (
 	"fmt"
+	"server/pgconnection"
+
 	"github.com/gin-gonic/gin"
 )
 
 // Message is a simple message with a body
 type Message struct {
-	ID       int64  `json:"id"`
-	Body     string `json:"body"`
+	ID   int64  `json:"id"`
+	Body string `json:"body"`
 }
 
 // GetMessages adds all messages in database to the body of the response
 func GetMessages(context *gin.Context) {
+	pgdb, ctx := pgconnection.GetPGDB()
 	err := pgdb.Ping(ctx)
 	if err != nil {
 		fmt.Println("Postgres connection not established")
@@ -35,6 +38,8 @@ func GetMessages(context *gin.Context) {
 
 // CreateMessage adds message to database and the same message to the message body of the response
 func CreateMessage(context *gin.Context) {
+	pgdb, ctx := pgconnection.GetPGDB()
+
 	err := pgdb.Ping(ctx)
 	if err != nil {
 		fmt.Println("Postgres connection not established")
