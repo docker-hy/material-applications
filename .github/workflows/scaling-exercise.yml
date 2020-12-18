@@ -1,0 +1,37 @@
+name: Release scaling-exercise
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'scaling-exercise/**'
+      - '.github/workflows/scaling-exercise.yml'
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    # Build and push calculator
+    - name: Publish to Registry
+      uses: docker/build-push-action@v1
+      with:
+        repository: devopsdockeruh/scaling-exercise-calculator
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        tags: latest
+        path: scaling-exercise/calculator
+
+
+    # Build and push compute
+    - name: Publish to Registry
+      uses: docker/build-push-action@v1
+      with:
+        repository: devopsdockeruh/scaling-exercise-compute
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        tags: latest
+        path: scaling-exercise/compute

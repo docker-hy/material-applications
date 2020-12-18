@@ -1,0 +1,26 @@
+name: Release simple-web-service
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'simple-web-service/**'
+      - '.github/workflows/simple-web-service.yml'
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    # Build and push
+    - name: Publish to Registry
+      uses: docker/build-push-action@v1
+      with:
+        repository: devopsdockeruh/simple-web-service
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        tags: latest
+        path: simple-web-service
