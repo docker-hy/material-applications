@@ -3,7 +3,7 @@ name: Release simple-web-service
 on:
   push:
     branches:
-      - master
+      - main
     paths:
       - 'simple-web-service/**'
       - '.github/workflows/simple-web-service.yml'

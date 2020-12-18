@@ -3,7 +3,7 @@ name: Release scaling-exercise
 on:
   push:
     branches:
-      - master
+      - main
     paths:
       - 'scaling-exercise/**'
       - '.github/workflows/scaling-exercise.yml'
