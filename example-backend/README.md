@@ -24,7 +24,7 @@ Server accepts the following environment variables:
   - `REQUEST_ORIGIN` to pass an url through the cors check. Default: https://example.com
 
 - In 2.X and after
-  - `REDIS` The hostname for redis. (port will default to 6379 the default for Redis)
+  - `REDIS_HOST` The hostname for redis. (port will default to 6379 the default for Redis)
 
 - In 2.X and after
   - `POSTGRES_HOST` The hostname for postgres database. (port will default to 5432 the default for Postgres)

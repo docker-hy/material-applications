@@ -9,7 +9,7 @@ const PostgresConnection = () => {
   const getMessages = async () => {
     try {
       const res = await axiosInstance.get("/messages");
-      setMessages(res.data);
+      setMessages(res?.data?.messages ?? []);
     } catch (e) {}
   };
 
