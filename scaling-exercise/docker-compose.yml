@@ -1,14 +1,12 @@
 version: '3.2'
 services:
   calculator:
-      build: ./calculator
-      image: calculator
+      image: devopsdockeruh/scaling-exercise-calculator
       ports:
         - 3000:3000
       container_name: calculator
   compute:
-      build: ./compute
-      image: compute
+      image: devopsdockeruh/scaling-exercise-compute
       environment:
         - VIRTUAL_HOST=compute.localtest.me
   load-balancer:
