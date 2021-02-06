@@ -25,7 +25,7 @@ const NginxSetup = () => {
 
   return (
     <>
-      <ExerciseButton success={status.success} onClick={testConnection} />
+      <ExerciseButton exercise="nginx" success={status.success} onClick={testConnection} />
       <span className="exercise-status">{status.message}</span>
     </>
   );

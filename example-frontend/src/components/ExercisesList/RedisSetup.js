@@ -25,7 +25,7 @@ const RedisSetup = () => {
 
   return (
     <>
-      <ExerciseButton success={status.success} onClick={testConnection} />
+      <ExerciseButton exercise="redis" success={status.success} onClick={testConnection} />
       <span className="exercise-status">{status.message}</span>
     </>
   );

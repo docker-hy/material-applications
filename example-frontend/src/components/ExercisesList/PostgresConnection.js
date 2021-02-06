@@ -25,7 +25,7 @@ const PostgresConnection = () => {
 
   return (
     <>
-      <ExerciseButton success={status.success} onClick={testConnection} />
+      <ExerciseButton exercise="postgres" success={status.success} onClick={testConnection} />
       <span className="exercise-status">{status.message}</span>
       <PostgresMessageList />
     </>
