@@ -53,8 +53,8 @@ jobs:
       env:
         REDIS_SOLUTION: ${{ secrets.REDIS_SOLUTION }}
 
-    - run: docker-compose restart
-
+    - run: docker-compose down && docker-compose up -d
+  
     # Cypress test redis
     - name: Cypress run
       uses: cypress-io/github-action@v2
@@ -70,7 +70,7 @@ jobs:
       env:
         REDIS_SOLUTION: ${{ secrets.POSTGRES_SOLUTION }}
 
-    - run: docker-compose restart
+    - run: docker-compose down && docker-compose up -d
 
     # Cypress test postgres
     - name: Cypress run
