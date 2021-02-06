@@ -23,7 +23,7 @@ const BackendConnection = () => {
 
   return (
     <>
-      <ExerciseButton success={status.success} onClick={testConnection} />
+      <ExerciseButton exercise="backend" success={status.success} onClick={testConnection} />
       <span className="exercise-status">{status.message}</span>
     </>
   );
