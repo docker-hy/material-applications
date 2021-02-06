@@ -113,7 +113,7 @@ jobs:
       env:
         NGINX_CONFIG: ${{ secrets.NGINX_CONFIG }}
 
-    - run: docker-compose up
+    - run: docker-compose up -d
 
     - name: Cypress run
       uses: cypress-io/github-action@v2
