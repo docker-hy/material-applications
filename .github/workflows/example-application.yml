@@ -68,7 +68,7 @@ jobs:
     - run: 'echo "$POSTGRES_SOLUTION" >> docker-compose.override.yml'
       shell: bash
       env:
-        REDIS_SOLUTION: ${{ secrets.POSTGRES_SOLUTION }}
+        POSTGRES_SOLUTION: ${{ secrets.POSTGRES_SOLUTION }}
 
     - run: docker-compose down && docker-compose up -d
 
