@@ -7,8 +7,7 @@ on:
     paths:
       - 'example-backend/**'
       - 'example-frontend/**'
-      - '.github/workflows/example-frontend.yml'
-      - '.github/workflows/example-backend.yml'
+      - '.github/workflows/example-application.yml'
 
 jobs:
   test-exercises:
