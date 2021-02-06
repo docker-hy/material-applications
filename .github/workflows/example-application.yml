@@ -22,10 +22,10 @@ jobs:
       env:
         EXAMPLE_BACKEND_DOCKERFILE: ${{ secrets.EXAMPLE_BACKEND_DOCKERFILE }}
 
-    - run: 'echo "$FRONTEND_DOCKERFILE" > example-frontend/Dockerfile'
+    - run: 'echo "$EXAMPLE_FRONTEND_DOCKERFILE" > example-frontend/Dockerfile'
       shell: bash
       env:
-        FRONTEND_DOCKERFILE: ${{ secrets.FRONTEND_DOCKERFILE }}
+        EXAMPLE_FRONTEND_DOCKERFILE: ${{ secrets.EXAMPLE_FRONTEND_DOCKERFILE }}
 
     - run: 'echo "$COMPOSE" > docker-compose.yml'
       shell: bash
@@ -89,15 +89,15 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - run: 'echo "$BACKEND_DOCKERFILE" > example-backend/Dockerfile'
+    - run: 'echo "$EXAMPLE_BACKEND_DOCKERFILE" > example-backend/Dockerfile'
       shell: bash
       env:
-        BACKEND_DOCKERFILE: ${{ secrets.BACKEND_DOCKERFILE }}
+        EXAMPLE_BACKEND_DOCKERFILE: ${{ secrets.EXAMPLE_BACKEND_DOCKERFILE }}
 
-    - run: 'echo "$FRONTEND_DOCKERFILE_NGINX" > example-frontend/Dockerfile'
+    - run: 'echo "$EXAMPLE_FRONTEND_DOCKERFILE_NGINX" > example-frontend/Dockerfile'
       shell: bash
       env:
-        FRONTEND_DOCKERFILE: ${{ secrets.FRONTEND_DOCKERFILE }}
+        EXAMPLE_FRONTEND_DOCKERFILE_NGINX: ${{ secrets.EXAMPLE_FRONTEND_DOCKERFILE_NGINX }}
 
     - run: 'echo "$COMPOSE" > docker-compose.yml'
       shell: bash
