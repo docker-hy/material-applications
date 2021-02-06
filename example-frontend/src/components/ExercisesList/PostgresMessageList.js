@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Input, Button, List, ListItem } from '@material-ui/core';
-import { axiosInstance } from "../util/pingpong";
+import { axiosInstance } from "../../util/pingpong";
 
 const PostgresConnection = () => {
   const [messageBody, setMessageBody] = useState("");

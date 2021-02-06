@@ -1,5 +1,5 @@
 import React from "react";
-import toskalogo from "./assets/toskalogo.svg";
+import toskalogo from "../assets/toskalogo.svg";
 
 const NavBar = () => (
   <div className="navbar">
