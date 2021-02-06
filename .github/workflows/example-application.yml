@@ -1,0 +1,117 @@
+name: Test example application
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'example-backend/**'
+      - 'example-frontend/**'
+      - '.github/workflows/example-frontend.yml'
+      - '.github/workflows/example-backend.yml'
+
+jobs:
+  test-exercises:
+    name: Test pre-nginx
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - run: 'echo "$EXAMPLE_BACKEND_DOCKERFILE" > example-backend/Dockerfile'
+      shell: bash
+      env:
+        EXAMPLE_BACKEND_DOCKERFILE: ${{ secrets.EXAMPLE_BACKEND_DOCKERFILE }}
+
+    - run: 'echo "$FRONTEND_DOCKERFILE" > example-frontend/Dockerfile'
+      shell: bash
+      env:
+        FRONTEND_DOCKERFILE: ${{ secrets.FRONTEND_DOCKERFILE }}
+
+    - run: 'echo "$COMPOSE" > docker-compose.yml'
+      shell: bash
+      env:
+        COMPOSE: ${{ secrets.COMPOSE }}
+
+    - run: 'echo "$BACKEND_SOLUTION" > docker-compose.override.yml'
+      shell: bash
+      env:
+        BACKEND_SOLUTION: ${{ secrets.BACKEND_SOLUTION }}
+
+    - run: docker-compose up -d
+
+    # Cypress test backend
+    - name: Cypress run
+      uses: cypress-io/github-action@v2
+      env:
+        CYPRESS_FRONTEND_URL: http://localhost:5000
+      with:
+        working-directory: ./example-application-cypress
+        spec: cypress/integration/backend.spec.js
+
+    # Append redis solution
+    - run: 'echo "$REDIS_SOLUTION" >> docker-compose.override.yml'
+      shell: bash
+      env:
+        REDIS_SOLUTION: ${{ secrets.REDIS_SOLUTION }}
+
+    - run: docker-compose down && docker-compose up -d
+
+    # Cypress test redis
+    - name: Cypress run
+      uses: cypress-io/github-action@v2
+      env:
+        CYPRESS_FRONTEND_URL: http://localhost:5000
+      with:
+        working-directory: ./example-application-cypress
+        spec: cypress/integration/redis.spec.js
+
+    # Append postgres solution
+    - run: 'echo "$POSTGRES_SOLUTION" >> docker-compose.override.yml'
+      shell: bash
+      env:
+        REDIS_SOLUTION: ${{ secrets.POSTGRES_SOLUTION }}
+
+    - run: docker-compose down && docker-compose up -d
+
+    # Cypress test postgres
+    - name: Cypress run
+      uses: cypress-io/github-action@v2
+      env:
+        CYPRESS_FRONTEND_URL: http://localhost:5000
+      with:
+        working-directory: ./example-application-cypress
+        spec: cypress/integration/postgres.spec.js
+
+
+  test-project:
+    name: Test everything
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - run: 'echo "$BACKEND_DOCKERFILE" > example-backend/Dockerfile'
+      shell: bash
+      env:
+        BACKEND_DOCKERFILE: ${{ secrets.BACKEND_DOCKERFILE }}
+
+    - run: 'echo "$FRONTEND_DOCKERFILE_NGINX" > example-frontend/Dockerfile'
+      shell: bash
+      env:
+        FRONTEND_DOCKERFILE: ${{ secrets.FRONTEND_DOCKERFILE }}
+
+    - run: 'echo "$COMPOSE" > docker-compose.yml'
+      shell: bash
+      env:
+        COMPOSE: ${{ secrets.COMPOSE }}
+
+    - run: 'echo "$PROJECT_SOLUTION_NGINX" > docker-compose.override.yml'
+      shell: bash
+      env:
+        PROJECT_SOLUTION_NGINX: ${{ secrets.PROJECT_SOLUTION_NGINX }}
+
+    - name: Cypress run
+      uses: cypress-io/github-action@v2
+      env:
+        CYPRESS_FRONTEND_URL: http://localhost:80
+      with:
+        working-directory: ./example-application-cypress
