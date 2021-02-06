@@ -53,7 +53,7 @@ jobs:
       env:
         REDIS_SOLUTION: ${{ secrets.REDIS_SOLUTION }}
 
-    - run: docker-compose down && docker-compose up -d
+    - run: docker-compose restart
 
     # Cypress test redis
     - name: Cypress run
@@ -70,7 +70,7 @@ jobs:
       env:
         REDIS_SOLUTION: ${{ secrets.POSTGRES_SOLUTION }}
 
-    - run: docker-compose down && docker-compose up -d
+    - run: docker-compose restart
 
     # Cypress test postgres
     - name: Cypress run
@@ -107,6 +107,13 @@ jobs:
       shell: bash
       env:
         PROJECT_SOLUTION_NGINX: ${{ secrets.PROJECT_SOLUTION_NGINX }}
+
+    - run: 'echo "$NGINX_CONFIG" > nginx.conf'
+      shell: bash
+      env:
+        NGINX_CONFIG: ${{ secrets.NGINX_CONFIG }}
+
+    - run: docker-compose up
 
     - name: Cypress run
       uses: cypress-io/github-action@v2
