@@ -10,6 +10,10 @@ Install [golang](https://golang.org/doc/install).
 
 Run `go build`. It will generate a binary named "server"
 
+# Test project #
+
+Run tests with `go test ./...`.
+
 # Execute project #
 
 Execute the file e.g. `./server`.
