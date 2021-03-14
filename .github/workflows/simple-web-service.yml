@@ -31,7 +31,7 @@ jobs:
         context: simple-web-service
         file: simple-web-service/Dockerfile
         push: true
-        tags: simple-web-service:latest
+        tags: devopsdockeruh/simple-web-service:latest
 
     - name: Build and push alpine
       uses: docker/build-push-action@v2
@@ -39,7 +39,7 @@ jobs:
         context: simple-web-service
         file: simple-web-service/Dockerfile.alpine
         push: true
-        tags: simple-web-service:alpine
+        tags: devopsdockeruh/simple-web-service:alpine
 
     - name: Build and push ubuntu
       uses: docker/build-push-action@v2
@@ -47,5 +47,5 @@ jobs:
         context: simple-web-service
         file: simple-web-service/Dockerfile.ubuntu
         push: true
-        tags: simple-web-service:ubuntu
+        tags: devopsdockeruh/simple-web-service:ubuntu
 
