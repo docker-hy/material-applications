@@ -15,12 +15,37 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    # Build and push
-    - name: Publish to Registry
-      uses: docker/build-push-action@v1
+    # Test different exercises
+
+    # We need to login so we can later push the image without issues. 
+    - name: Login to DockerHub
+      uses: docker/login-action@v1 
       with:
-        repository: devopsdockeruh/simple-web-service
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        tags: latest
-        path: simple-web-service
+
+    # Build and push
+    - name: Build and push scratch
+      uses: docker/build-push-action@v2
+      with:
+        context: simple-web-service
+        file: simple-web-service/Dockerfile
+        push: true
+        tags: simple-web-service:latest
+
+    - name: Build and push alpine
+      uses: docker/build-push-action@v2
+      with:
+        context: simple-web-service
+        file: simple-web-service/Dockerfile.alpine
+        push: true
+        tags: simple-web-service:alpine
+
+    - name: Build and push ubuntu
+      uses: docker/build-push-action@v2
+      with:
+        context: simple-web-service
+        file: simple-web-service/Dockerfile.ubuntu
+        push: true
+        tags: simple-web-service:ubuntu
+

@@ -1,12 +1,13 @@
 package main
 
 import (
-	"os"
+	"encoding/base64"
 	"fmt"
-	"time"
+	"os"
+	"path/filepath"
 	"server"
 	"strings"
-	"path/filepath"
+	"time"
 )
 
 func includes(a []string, x string) bool {
@@ -54,9 +55,16 @@ func main() {
 
 
 	fmt.Println("Starting log output")
+	counter := 0
 	for {
 		timestamp := time.Now().Round(time.Second).UTC().String()
 		writeToFile(timestamp)
 		time.Sleep(2 * time.Second)
+		counter++
+		if counter == 5 {
+			message, _ := base64.StdEncoding.DecodeString("U2VjcmV0IG1lc3NhZ2UgaXM6ICdZb3UgY2FuIGZpbmQgdGhlIHNvdXJjZSBjb2RlIGhlcmU6IGh0dHBzOi8vZ2l0aHViLmNvbS9kb2NrZXItaHkn")
+			writeToFile(string(message))
+			counter = 0
+		}
 	}
 }
