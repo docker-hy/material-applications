@@ -15,23 +15,25 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    # Build and push calculator
-    - name: Publish to Registry
-      uses: docker/build-push-action@v1
+    # We need to login so we can later push the image without issues. 
+    - name: Login to DockerHub
+      uses: docker/login-action@v1 
       with:
-        repository: devopsdockeruh/scaling-exercise-calculator
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-        tags: latest
-        path: scaling-exercise/calculator
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+    # Build and push calculator
+    - name: Build and push calculator
+      uses: docker/build-push-action@v2
+      with:
+        context: scaling-exercise/calculator
+        push: true
+        tags: devopsdockeruh/scaling-exercise-calculator:latest
 
     # Build and push compute
-    - name: Publish to Registry
-      uses: docker/build-push-action@v1
+    - name: Build and push compute
+      uses: docker/build-push-action@v2
       with:
-        repository: devopsdockeruh/scaling-exercise-compute
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-        tags: latest
-        path: scaling-exercise/compute
+        context: scaling-exercise/compute
+        push: true
+        tags: devopsdockeruh/scaling-exercise-compute:latest
