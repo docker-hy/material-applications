@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Presses</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @presses.each do |press| %>
+      <tr>
+        <td><%= link_to 'Show', press %></td>
+        <td><%= link_to 'Edit', edit_press_path(press) %></td>
+        <td><%= link_to 'Destroy', press, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Press', new_press_path %>

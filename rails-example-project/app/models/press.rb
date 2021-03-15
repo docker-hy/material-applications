@@ -1,0 +1,2 @@
+class Press < ApplicationRecord
+end

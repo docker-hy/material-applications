@@ -1,0 +1,17 @@
+<%= form_with(model: press) do |form| %>
+  <% if press.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(press.errors.count, "error") %> prohibited this press from being saved:</h2>
+
+      <ul>
+        <% press.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
