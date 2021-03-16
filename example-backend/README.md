@@ -4,7 +4,7 @@ This project is created to help learn docker configurations for backend projects
 
 # Prerequisites for development
 
-Install [golang](https://golang.org/doc/install).
+Install [golang](https://golang.org/doc/install) 1.15
 
 # Build project #
 
@@ -18,7 +18,7 @@ Run tests with `go test ./...`.
 
 Execute the file e.g. `./server`.
 
-> In exercise 1. and after you will need to add some environment variables. Not everything is important for all exercises and some may be useless.
+> In exercise 1.12 and after you will need to add some environment variables. Not everything is important for all exercises and some may be useless.
 
 Server accepts the following environment variables:
 
