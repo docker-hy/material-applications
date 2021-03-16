@@ -30,7 +30,7 @@ An example for serving static files:
 
 Use npm package called serve to serve the project in port 5000:
 - install: `npm install -g serve`
-- serve: `serve -s -l 5000 dist`
+- serve: `serve -s -l 5000 build`
 
 Test that the project is running by going to <http://localhost:5000>
 
