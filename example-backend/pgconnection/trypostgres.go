@@ -57,13 +57,13 @@ func InitializePostgresClient() {
 	postgresDatabase := common.FallbackString(os.Getenv("POSTGRES_DATABASE"), "postgres")
 
 	if len(postgresHost) == 0 {
-		fmt.Println("[Ex 2.X+] POSTGRES_HOST env was not passed so postgres connection is not initialized")
+		fmt.Println("[Ex 2.6+] POSTGRES_HOST env was not passed so postgres connection is not initialized")
 		return
 	}
 
 	postgresAddr := postgresHost + ":5432"
 
-	fmt.Println(`[Ex 2.X+] Initializing postgres connection with envs
+	fmt.Println(`[Ex 2.6+] Initializing postgres connection with envs
 		POSTGRES_HOST      ` + postgresHost + `,
 		POSTGRES_USER:     ` + postgresUser + `,
 		POSTGRES_PASSWORD: ` + postgresPassword + `,
@@ -85,14 +85,14 @@ func InitializePostgresClient() {
 				Body: "pong",
 			}
 			pgdb.Model(message).Insert()
-			fmt.Println("[Ex 2.X+] Connection to postgres initialized, ready to ping pong.")
+			fmt.Println("[Ex 2.6+] Connection to postgres initialized, ready to ping pong.")
 			break
 		}
 		if i < 4 {
-			fmt.Println("[Ex 2.X+] Connection to postgres failed! Retrying...")
+			fmt.Println("[Ex 2.6+] Connection to postgres failed! Retrying...")
 			time.Sleep(2 * time.Second)
 		} else {
-			fmt.Print("[Ex 2.X+] Failing to connect to postgres. The error is:\n", err, "\n\n")
+			fmt.Print("[Ex 2.6+] Failing to connect to postgres. The error is:\n", err, "\n\n")
 		}
 	}
 }
