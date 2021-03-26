@@ -1,6 +1,7 @@
 package router
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 	"server/cache"
@@ -43,8 +44,14 @@ func pingpong(context *gin.Context) {
 func Router() *gin.Engine {
 	allowedOrigin := common.FallbackString(os.Getenv("REQUEST_ORIGIN"), "https://example.com")
 
-	cache.InitializeRedisClient()
-	pgconnection.InitializePostgresClient()
+	cacheErr := cache.InitializeRedisClient()
+	if cacheErr != nil {
+		fmt.Println(cacheErr)
+	}
+	pgErr := pgconnection.InitializePostgresClient()
+	if pgErr != nil {
+		fmt.Println(pgErr)
+	}
 
 	config := cors.DefaultConfig()
 

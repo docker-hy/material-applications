@@ -4,7 +4,7 @@ This project is created to help learn docker configurations for backend projects
 
 # Prerequisites for development
 
-Install [golang](https://golang.org/doc/install) 1.15
+Install [golang](https://golang.org/doc/install) 1.16
 
 # Build project #
 

@@ -23,7 +23,7 @@ type Message struct {
 // createSchema creates database schema for User and Story models.
 func createSchema() error {
 	err := pgdb.Model((*Message)(nil)).CreateTable(&orm.CreateTableOptions{
-		Temp: true,
+		Temp: false,
 	})
 	return err
 }
@@ -31,17 +31,21 @@ func createSchema() error {
 // TryPostgres tests postgres connection, returns boolean and possibly error
 func TryPostgres() (bool, error) {
 	if pgdb == nil {
-		InitializePostgresClient()
+		err := InitializePostgresClient()
+		if (err != nil) {
+			return false, errors.New("[Ex 2.6+] Unable to create connection to postgres")
+		}
 	}
 
 	message := new(Message)
 	err := pgdb.Model(message).
 		Where("body = ?", "pong").
+		Limit(1).
 		Select()
 
 	if err != nil {
 		fmt.Println(err)
-		return false, errors.New("No postgres, check backend output for additional info")
+		return false, errors.New("[Ex 2.6+] No postgres, check backend output for additional info")
 	}
 
 	fmt.Println(message)
@@ -50,15 +54,14 @@ func TryPostgres() (bool, error) {
 }
 
 // InitializePostgresClient checks for the connection
-func InitializePostgresClient() {
+func InitializePostgresClient() error {
 	postgresHost := os.Getenv("POSTGRES_HOST")
 	postgresUser := common.FallbackString(os.Getenv("POSTGRES_USER"), "postgres")
 	postgresPassword := common.FallbackString(os.Getenv("POSTGRES_PASSWORD"), "postgres")
 	postgresDatabase := common.FallbackString(os.Getenv("POSTGRES_DATABASE"), "postgres")
 
 	if len(postgresHost) == 0 {
-		fmt.Println("[Ex 2.6+] POSTGRES_HOST env was not passed so postgres connection is not initialized")
-		return
+		return errors.New("[Ex 2.6+] POSTGRES_HOST env was not passed so postgres connection is not initialized")
 	}
 
 	postgresAddr := postgresHost + ":5432"
@@ -77,7 +80,7 @@ func InitializePostgresClient() {
 		Database: postgresDatabase,
 	})
 
-	for i := 0; i <= 4; i++ {
+	for i := 0; i <= 10; i++ {
 		err := pgdb.Ping(ctx)
 		if err == nil {
 			createSchema()
@@ -88,13 +91,15 @@ func InitializePostgresClient() {
 			fmt.Println("[Ex 2.6+] Connection to postgres initialized, ready to ping pong.")
 			break
 		}
-		if i < 4 {
+		if i < 10 {
 			fmt.Println("[Ex 2.6+] Connection to postgres failed! Retrying...")
-			time.Sleep(2 * time.Second)
+			time.Sleep(5 * time.Second)
 		} else {
-			fmt.Print("[Ex 2.6+] Failing to connect to postgres. The error is:\n", err, "\n\n")
+			return errors.New("[Ex 2.6+] Failing to connect to postgres. The error is:\n" + err.Error())
 		}
 	}
+
+	return nil
 }
 
 func GetPGDB() (*pg.DB, context.Context) {
