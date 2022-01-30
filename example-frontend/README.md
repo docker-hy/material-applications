@@ -8,9 +8,9 @@ This project is created to help learn docker configurations for frontend project
 
 Install [node](https://nodejs.org/en/download/). 
 
-Example node install instructions for LTS node 14.x:
+Example node install instructions for LTS node 16.x:
 ```
-curl -sL https://deb.nodesource.com/setup_14.x | bash
+curl -sL https://deb.nodesource.com/setup_16.x | bash
 sudo apt install -y nodejs
 ```
 
