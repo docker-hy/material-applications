@@ -10,9 +10,9 @@ class PressesTest < ApplicationSystemTestCase
     assert_selector "h1", text: "Presses"
   end
 
-  test "creating a Press" do
+  test "should create press" do
     visit presses_url
-    click_on "New Press"
+    click_on "New press"
 
     click_on "Create Press"
 
@@ -20,9 +20,9 @@ class PressesTest < ApplicationSystemTestCase
     click_on "Back"
   end
 
-  test "updating a Press" do
-    visit presses_url
-    click_on "Edit", match: :first
+  test "should update Press" do
+    visit press_url(@press)
+    click_on "Edit this press", match: :first
 
     click_on "Update Press"
 
@@ -30,11 +30,9 @@ class PressesTest < ApplicationSystemTestCase
     click_on "Back"
   end
 
-  test "destroying a Press" do
-    visit presses_url
-    page.accept_confirm do
-      click_on "Destroy", match: :first
-    end
+  test "should destroy Press" do
+    visit press_url(@press)
+    click_on "Destroy this press", match: :first
 
     assert_text "Press was successfully destroyed"
   end

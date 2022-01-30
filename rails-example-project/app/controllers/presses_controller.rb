@@ -13,7 +13,6 @@ class PressesController < ApplicationController
   # GET /presses/new
   def new
     @press = Press.new
-    @count = Press.count
   end
 
   # GET /presses/1/edit
@@ -26,7 +25,7 @@ class PressesController < ApplicationController
 
     respond_to do |format|
       if @press.save
-        format.html { redirect_to @press, notice: "Press was successfully created." }
+        format.html { redirect_to press_url(@press), notice: "Press was successfully created." }
         format.json { render :show, status: :created, location: @press }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -39,7 +38,7 @@ class PressesController < ApplicationController
   def update
     respond_to do |format|
       if @press.update(press_params)
-        format.html { redirect_to @press, notice: "Press was successfully updated." }
+        format.html { redirect_to press_url(@press), notice: "Press was successfully updated." }
         format.json { render :show, status: :ok, location: @press }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -51,6 +50,7 @@ class PressesController < ApplicationController
   # DELETE /presses/1 or /presses/1.json
   def destroy
     @press.destroy
+
     respond_to do |format|
       format.html { redirect_to presses_url, notice: "Press was successfully destroyed." }
       format.json { head :no_content }

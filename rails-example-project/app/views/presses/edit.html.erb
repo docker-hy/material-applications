@@ -1,6 +1,10 @@
-<h1>Editing Press</h1>
+<h1>Editing press</h1>
 
-<%= render 'form', press: @press %>
+<%= render "form", press: @press %>
 
-<%= link_to 'Show', @press %> |
-<%= link_to 'Back', presses_path %>
+<br>
+
+<div>
+  <%= link_to "Show this press", @press %> |
+  <%= link_to "Back to presses", presses_path %>
+</div>

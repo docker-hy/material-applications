@@ -1,6 +1,9 @@
-<h1>New Press</h1>
+<h1>New press</h1>
 
-<p> Total presses: <%= @count %> </p>
-<%= render 'form', press: @press %>
+<%= render "form", press: @press %>
 
-<%= link_to 'List presses', presses_path %>
+<br>
+
+<div>
+  <%= link_to "Back to presses", presses_path %>
+</div>
