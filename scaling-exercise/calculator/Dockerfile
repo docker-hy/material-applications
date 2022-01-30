@@ -1,10 +1,19 @@
-FROM node:16
+FROM node:16 as build
 
-WORKDIR /usr/app
+WORKDIR /usr/src/app
+
+COPY package* ./
+RUN npm ci
 
 COPY . .
-RUN npm ci && npm run build
+RUN npm run build
 
-EXPOSE 3000
+FROM node:16-alpine
 
-CMD ["npm", "start"] 
+ENV PORT 3000
+
+RUN npm install -g serve
+
+COPY --from=build /usr/src/app/build /usr/src/html
+
+CMD serve -l $PORT /usr/src/html
