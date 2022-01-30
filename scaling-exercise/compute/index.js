@@ -18,7 +18,7 @@ const simpleWait = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
 app.post('*', async (req, res) => {
   queue.push({ req, res });
-  console.log('Added to que')
+  console.log('Added to queue')
   const handle = async (req, res) => {
     const { val1, val2, operation } = req.body
     console.log(`Started calculations for ${val1} ${operation} ${val2}`)
