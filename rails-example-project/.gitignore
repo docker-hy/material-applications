@@ -31,8 +31,9 @@
 
 /public/assets
 
-# Ignore master key for decrypting credentials and more.
-/config/master.key
+# We are going to accept the master key here. Do not do this at home!
+# It's just too much of a sidequest for the course to wonder about this.
+# /config/master.key
 
 /public/packs
 /public/packs-test
