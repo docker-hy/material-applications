@@ -1,4 +1,4 @@
-release: NodeJS app
+name: NodeJS app
 
 on:
   push:
