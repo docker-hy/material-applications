@@ -1,5 +1,4 @@
-
-name: Release NodeJS app
+release: NodeJS app
 
 on:
   push:
@@ -10,14 +9,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: build
-        run: 
-          docker build . -t devopsdockeruh/coursepage:latest          
-      
-      - name: publish
-        run: 
-          docker login -u delcagox -p ${{ secrets.DOCKERHUB_TOKEN }} 
-          docker push delcagox/devopswithdockeruh/coursepage:latest
-      
-      # ...
+      - uses: actions/checkout@v2
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: spirizeon/dwd-coursepage:latest
