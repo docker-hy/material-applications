@@ -4,6 +4,8 @@ services:
   localrun:
     image: delcagox/dwd-coursepage:latest
     container_name: container_local
+    ports:
+      - 127.0.0.1:8080:8080
   watchtower:
     image: containrrr/watchtower
     environment:
