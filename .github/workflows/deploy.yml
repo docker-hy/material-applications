@@ -3,7 +3,7 @@ name: NodeJS app
 on:
   push:
     branches:
-      - main
+      - ghcrnew
 
 jobs:
   build:
