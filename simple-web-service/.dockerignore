@@ -1,8 +1,0 @@
-Dockerfile
-Dockerfile.alpine
-Dockerfile.ubuntu
-.dockerignore
-.gitignore
-simple-web-service
-README.md
-text.log

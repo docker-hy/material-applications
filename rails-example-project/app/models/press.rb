@@ -1,2 +1,0 @@
-class Press < ApplicationRecord
-end

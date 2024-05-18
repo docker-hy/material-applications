@@ -1,5 +1,0 @@
-server
-
-# To not accidentally reveal answers. If you're student copying the application you may remove this.
-Dockerfile
-docker-compose.yml
