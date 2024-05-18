@@ -1,0 +1,101 @@
+---
+# When a push to a branch other than the default, or a PR targeting the
+# default branch happens, run the CI workflow. Also run the CI workflow
+# for manual and scheduled triggers.
+
+name: CI
+'on':
+  workflow_dispatch:
+    inputs:
+      molecule_verbosity:
+        description: Molecule Verbosity
+        default: '0'
+        type: string
+      molecule_debug:
+        description: Molecule Debug
+        default: '0'
+        type: string
+
+  push:
+    branches:
+      - '!main'
+
+  pull_request:
+    branches:
+      - 'main'
+
+  schedule:
+    - cron: '27 3 * * 2'
+
+defaults:
+  run:
+    working-directory: 'impinj.sssd'
+
+env:
+  PY_COLORS: '1'
+  ANSIBLE_FORCE_COLOR: '1'
+  ANSIBLE_VERBOSITY: '0'
+  ANSIBLE_STDOUT_CALLBACK: 'yaml'
+  ANSIBLE_LOAD_CALLBACK_PLUGINS: 'true'
+  ANSIBLE_SSH_HOST_KEY_CHECKING: 'false'
+  ANSIBLE_HOST_KEY_CHECKING: 'false'
+  VAULT_ADDR: 'https://vault.impinj.com:8200'
+  VAULT_TLS_SERVER_NAME: 'vault.impinj.com'
+
+jobs:
+  molecule:
+    name: Molecule
+    runs-on: [self-hosted, vault, vsphere, python]
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4.1.1
+        with:
+          path: 'impinj.sssd'
+
+      - name: Set up Python 3
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'  # caching pip dependencies
+
+      - name: Install Ansible testing Python dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          if [ -f ./requirements.txt ]; then python -m pip install -U -r ./requirements.txt; fi
+          pipdeptree
+        shell: bash
+
+      - name: Lint code.
+        run: |
+          yamllint .
+          ansible-lint .
+        shell: bash
+
+      # Use Vault approle from secret/di/approle/github-di
+      # add 'exportToken: true' if VAULT_TOKEN is needed downstream
+      - name: Obtain needed credentials from Vault
+        id: vault_secrets
+        uses: hashicorp/vault-action@v2
+        with:
+          url: https://vault.impinj.com:8200
+          method: approle
+          roleId: ${{ secrets.ROLE_ID_GITHUB_DI }}
+          secretId: ${{ secrets.SECRET_ID_GITHUB_DI }}
+          exportToken: true
+          secrets: |
+            secret/di/passwords/sysman private_key | SSH_PRIVATE_KEY ;
+            secret/di/passwords/svc_devopsauto username | AD_ADMIN_USER ;
+            secret/di/passwords/svc_devopsauto password | AD_ADMIN_PASS ;
+            secret/di/passwords/redhat_portal username | RHEL_PORTAL_USER ;
+            secret/di/passwords/redhat_portal password | RHEL_PORTAL_PASS
+
+      - name: Run Molecule tests
+        run: |
+          molecule drivers | grep -q 'delegated'  # Verify needed driver is present
+          molecule test
+        shell: bash
+        env:
+          VMWARE_HOST: wesxenvc20.impinj.com
+          VMWARE_PASSWORD: ${{ secrets.GOVC_PASSWORD }}
+          VMWARE_USER: ${{ secrets.GOVC_USERNAME }}
+          VMWARE_VALIDATE_CERTS: false
