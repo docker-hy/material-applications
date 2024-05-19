@@ -1,4 +1,4 @@
-name: Release
+name: Deploy to AWS ECS
 'on':
   push:
     branches:
@@ -23,4 +23,81 @@ jobs:
         with:
           push: true
           tags: techn0mad/express-app:latest
+
+  deploy:
+    name: Deploy Container to AWS ECS
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Create ECS cluster
+      run: |
+        aws ecs create-cluster --cluster-name express-app-cluster
+
+    - name: Register ECS task definition
+      run: |
+        cat <<EoF > task-def.json
+        {
+          "family": "express-app-task",
+          "networkMode": "awsvpc",
+          "containerDefinitions": [
+            {
+              "name": "express-app-ecs",
+              "image": "techn0mad/express-app:latest",
+              "essential": true,
+              "memory": 512,
+              "cpu": 256,
+              "portMappings": [
+                {
+                  "containerPort": 8080,
+                  "hostPort": 8080
+                }
+              ]
+            }
+          ],
+          "requiresCompatibilities": ["FARGATE"],
+          "cpu": "256",
+          "memory": "512"
+        }
+        EoF
+        aws ecs register-task-definition --cli-input-json file://task-def.json
+
+    - name: Create ECS service
+      run: |
+        aws ecs create-service \
+          --cluster express-app-cluster \
+          --service-name express-app-service \
+          --task-definition express-app-task \
+          --desired-count 1 \
+          --launch-type FARGATE \
+          --network-configuration "awsvpcConfiguration={subnets=[subnet-04d86d5f],securityGroups=[sg-008839e118a45a776],assignPublicIp=ENABLED}"
+
+    #- name: Wait for service to be stable
+    #  run: |
+    #    aws ecs wait services-stable --cluster express-app-cluster --services express-app-service
+
+    #- name: Stop ECS service
+    #  run: |
+    #    aws ecs update-service --cluster express-app-cluster --service express-app-service --desired-count 0
+
+    #- name: Delete ECS service
+    #  run: |
+    #    aws ecs delete-service --cluster express-app-cluster --service express-app-service --force
+
+    #- name: Deregister task definition
+    #  run: |
+    #    aws ecs deregister-task-definition --task-definition express-app-task
+
+    #- name: Delete ECS cluster
+    #  run: |
+    #    aws ecs delete-cluster --cluster express-app-cluster
 
