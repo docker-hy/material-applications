@@ -3,7 +3,7 @@ name: Test example application
 on:
   push:
     branches:
-      - main
+      - skip_main
     paths:
       - 'example-backend/**'
       - 'example-frontend/**'
